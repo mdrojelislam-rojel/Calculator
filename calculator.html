@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমার নিজস্ব ক্যালকুলেটর</title>
+    <style>
+        /* ক্যালকুলেটরের ডিজাইন (CSS) */
+        body {
+            display: flex;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #121212;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+
+        .calculator {
+            background-color: #1e1e1e;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
+            width: 320px;
+        }
+
+        #display {
+            width: 100%;
+            height: 60px;
+            background-color: #2d2d2d;
+            border: none;
+            outline: none;
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 2rem;
+            text-align: right;
+            padding: 10px;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        button {
+            padding: 20px;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50%; /* বাটনগুলো গোল দেখানোর জন্য */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #3d3d3d;
+            color: #ffffff;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* অপারেটর বাটনের কালার (+, -, *, /) */
+        .operator {
+            background-color: #ff9f0a;
+            color: white;
+        }
+
+        /* ক্লিয়ার এবং ডিলিট বাটনের কালার */
+        .clear-btn {
+            background-color: #a5a5a5;
+            color: black;
+        }
+
+        /* সমান (=) বাটনের কালার */
+        .equal {
+            background-color: #ff9f0a;
+            color: white;
+            grid-column: span 1; /* চাইলে বড় করা যায় */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ক্যালকুলেটরের গঠন (HTML) -->
+    <div class="calculator">
+        <input type="text" id="display" readonly placeholder="0">
+        <div class="buttons">
+            <button class="clear-btn" onclick="clearDisplay()">C</button>
+            <button class="clear-btn" onclick="deleteLast()">DEL</button>
+            <button class="operator" onclick="appendValue('%')">%</button>
+            <button class="operator" onclick="appendValue('/')">÷</button>
+            
+            <button onclick="appendValue('7')">7</button>
+            <button onclick="appendValue('8')">8</button>
+            <button onclick="appendValue('9')">9</button>
+            <button class="operator" onclick="appendValue('*')">×</button>
+            
+            <button onclick="appendValue('4')">4</button>
+            <button onclick="appendValue('5')">5</button>
+            <button onclick="appendValue('6')">6</button>
+            <button class="operator" onclick="appendValue('-')">−</button>
+            
+            <button onclick="appendValue('1')">1</button>
+            <button onclick="appendValue('2')">2</button>
+            <button onclick="appendValue('3')">3</button>
+            <button class="operator" onclick="appendValue('+')">+</button>
+            
+            <button onclick="appendValue('00')">00</button>
+            <button onclick="appendValue('0')">0</button>
+            <button onclick="appendValue('.')">.</button>
+            <button class="equal" onclick="calculate()">=</button>
+        </div>
+    </div>
+
+    <!-- ক্যালকুলেটরের লজিক (JavaScript) -->
+    <script>
+        const display = document.getElementById('display');
+
+        // স্ক্রিনে সংখ্যা বা চিহ্ন যোগ করা
+        function appendValue(val) {
+            if (display.value === 'Error') {
+                display.value = '';
+            }
+            display.value += val;
+        }
+
+        // পুরো স্ক্রিন পরিষ্কার করা (C)
+        function clearDisplay() {
+            display.value = '';
+        }
+
+        // শেষ অক্ষরটি মুছে ফেলা (DEL)
+        function deleteLast() {
+            display.value = display.value.slice(0, -1);
+        }
+
+        // হিসাব-নিকাশ করা (=)
+        function calculate() {
+            try {
+                // eval ফাংশন দিয়ে স্ক্রিনের সমীকরণটি সমাধান করা হচ্ছে
+                if (display.value !== '') {
+                    display.value = eval(display.value);
+                }
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+    </script>
+</body>
+</html>
