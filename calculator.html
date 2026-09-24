@@ -3,13 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>আমার নিজস্ব ক্যালকুলেটর</title>
+    <title>Calculator </title>
     <style>
-        /* ক্যালকুলেটরের ডিজাইন (CSS) */
         body {
             display: flex;
             justify-content: center;
-            align-content: center;
             align-items: center;
             height: 100vh;
             background-color: #121212;
@@ -22,22 +20,37 @@
             padding: 25px;
             border-radius: 20px;
             box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.5);
-            width: 320px;
+            width: 340px;
+        }
+
+        /* মেমোরি ইন্ডিকেটর (M) দেখানোর জন্য */
+        .display-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        #memory-indicator {
+            position: absolute;
+            left: 12px;
+            top: 8px;
+            color: #ff9f0a;
+            font-size: 0.85rem;
+            font-weight: bold;
+            visibility: hidden; /* মেমোরিতে কিছু থাকলে এটি দৃশ্যমান হবে */
         }
 
         #display {
             width: 100%;
-            height: 60px;
+            height: 65px;
             background-color: #2d2d2d;
             border: none;
             outline: none;
             border-radius: 10px;
             color: #ffffff;
-            font-size: 2rem;
+            font-size: 2.2rem;
             text-align: right;
-            padding: 10px;
+            padding: 10px 15px;
             box-sizing: border-box;
-            margin-bottom: 20px;
         }
 
         .buttons {
@@ -47,14 +60,14 @@
         }
 
         button {
-            padding: 20px;
-            font-size: 1.25rem;
+            padding: 18px;
+            font-size: 1.2rem;
             font-weight: bold;
             border: none;
-            border-radius: 50%; /* বাটনগুলো গোল দেখানোর জন্য */
+            border-radius: 12px; /* একটু চারকোনা-গোল মিশ্রিত প্রফেশনাল লুক */
             cursor: pointer;
             transition: all 0.2s ease;
-            background-color: #3d3d3d;
+            background-color: #333333;
             color: #ffffff;
         }
 
@@ -62,35 +75,47 @@
             transform: scale(0.95);
         }
 
-        /* অপারেটর বাটনের কালার (+, -, *, /) */
+        /* মেমোরি এবং স্পেশাল বাটনগুলোর কালার */
+        .memory-btn {
+            background-color: #2c3e50;
+            color: #00d2d3;
+            font-size: 1rem;
+        }
+
         .operator {
             background-color: #ff9f0a;
             color: white;
         }
 
-        /* ক্লিয়ার এবং ডিলিট বাটনের কালার */
         .clear-btn {
             background-color: #a5a5a5;
             color: black;
         }
 
-        /* সমান (=) বাটনের কালার */
         .equal {
             background-color: #ff9f0a;
             color: white;
-            grid-column: span 1; /* চাইলে বড় করা যায় */
         }
     </style>
 </head>
 <body>
 
-    <!-- ক্যালকুলেটরের গঠন (HTML) -->
     <div class="calculator">
-        <input type="text" id="display" readonly placeholder="0">
+        <div class="display-container">
+            <span id="memory-indicator">M</span>
+            <input type="text" id="display" readonly placeholder="0">
+        </div>
+        
         <div class="buttons">
+            <!-- মেমোরি এবং জিটি ফাংশন বাটন -->
+            <button class="memory-btn" onclick="handleMRC()">MRC</button>
+            <button class="memory-btn" onclick="handleMPlus()">M+</button>
+            <button class="memory-btn" onclick="handleMMinus()">M-</button>
+            <button class="memory-btn" onclick="handleGT()">GT</button>
+            
             <button class="clear-btn" onclick="clearDisplay()">C</button>
             <button class="clear-btn" onclick="deleteLast()">DEL</button>
-            <button class="operator" onclick="appendValue('%')">%</button>
+            <button class="operator" onclick="calculatePercentage()">%</button>
             <button class="operator" onclick="appendValue('/')">÷</button>
             
             <button onclick="appendValue('7')">7</button>
@@ -115,37 +140,116 @@
         </div>
     </div>
 
-    <!-- ক্যালকুলেটরের লজিক (JavaScript) -->
     <script>
         const display = document.getElementById('display');
+        const memoryIndicator = document.getElementById('memory-indicator');
 
-        // স্ক্রিনে সংখ্যা বা চিহ্ন যোগ করা
+        // মেমোরি ভেরিয়েবলসমূহ
+        let memoryValue = 0;   // M এর মান জমা রাখার জন্য
+        let grandTotal = 0;     // GT এর মান জমা রাখার জন্য
+        let mrcClickCount = 0;  // MRC কতবার ক্লিক করা হলো তা গোনার জন্য
+
         function appendValue(val) {
-            if (display.value === 'Error') {
+            if (display.value === 'Error' || display.value === '0') {
                 display.value = '';
             }
             display.value += val;
+            mrcClickCount = 0; // অন্য বাটনে চাপ দিলে MRC কাউন্টার রিসেট হবে
         }
 
-        // পুরো স্ক্রিন পরিষ্কার করা (C)
         function clearDisplay() {
             display.value = '';
+            mrcClickCount = 0;
         }
 
-        // শেষ অক্ষরটি মুছে ফেলা (DEL)
         function deleteLast() {
             display.value = display.value.slice(0, -1);
+            mrcClickCount = 0;
         }
 
-        // হিসাব-নিকাশ করা (=)
+        // সাধারণ হিসাব (=)
         function calculate() {
             try {
-                // eval ফাংশন দিয়ে স্ক্রিনের সমীকরণটি সমাধান করা হচ্ছে
                 if (display.value !== '') {
-                    display.value = eval(display.value);
+                    // স্ক্রিনের গুণ এবং ভাগের চিহ্ন পরিবর্তন করে eval করা
+                    let expression = display.value;
+                    let result = eval(expression);
+                    
+                    display.value = result;
+                    
+                    // Grand Total (GT) এ যোগ করা
+                    grandTotal += parseFloat(result); 
+                    mrcClickCount = 0;
                 }
             } catch (error) {
                 display.value = 'Error';
+            }
+        }
+
+        // পার্সেন্টেজ (%) লজিক ফিক্স
+        function calculatePercentage() {
+            try {
+                if (display.value !== '') {
+                    let currentValue = eval(display.value);
+                    display.value = currentValue / 100;
+                    mrcClickCount = 0;
+                }
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+
+        // M+ ফাংশন
+        function handleMPlus() {
+            try {
+                let currentValue = display.value !== '' ? eval(display.value) : 0;
+                memoryValue += parseFloat(currentValue);
+                updateMemoryIndicator();
+                mrcClickCount = 0;
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+
+        // M- ফাংশন
+        function handleMMinus() {
+            try {
+                let currentValue = display.value !== '' ? eval(display.value) : 0;
+                memoryValue -= parseFloat(currentValue);
+                updateMemoryIndicator();
+                mrcClickCount = 0;
+            } catch (error) {
+                display.value = 'Error';
+            }
+        }
+
+        // MRC ফাংশন (১ম ক্লিকে শো, ২য় ক্লিকে মেমোরি ক্লিয়ার)
+        function handleMRC() {
+            mrcClickCount++;
+            if (mrcClickCount === 1) {
+                // ১ম ক্লিক: মেমোরির মান স্ক্রিনে দেখাবে
+                display.value = memoryValue;
+            } else if (mrcClickCount === 2) {
+                // পরপর ২য় ক্লিক: মেমোরি ক্লিয়ার
+                memoryValue = 0;
+                display.value = '0';
+                updateMemoryIndicator();
+                mrcClickCount = 0;
+            }
+        }
+
+        // GT (Grand Total) ফাংশন
+        function handleGT() {
+            display.value = grandTotal;
+            mrcClickCount = 0;
+        }
+
+        // স্ক্রিনে ছোট 'M' লেখাটি দেখানো বা লুকানোর জন্য
+        function updateMemoryIndicator() {
+            if (memoryValue !== 0) {
+                memoryIndicator.style.visibility = 'visible';
+            } else {
+                memoryIndicator.style.visibility = 'hidden';
             }
         }
     </script>
