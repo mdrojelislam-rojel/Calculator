@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator </title>
+    <title>Calculator</title>
     <style>
         body {
             display: flex;
@@ -190,6 +190,7 @@
         function calculatePercentage() {
             try {
                 if (display.value !== '') {
+                    // স্ক্রিনে থাকা বর্তমান মানকে ১০০ দিয়ে ভাগ করে সরাসরি পার্সেন্টেজ বের করা
                     let currentValue = eval(display.value);
                     display.value = currentValue / 100;
                     mrcClickCount = 0;
