@@ -12,15 +12,41 @@
         }
 
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #121212;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 15px;
-        }
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #121212;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 15px;
+    gap: 15px;
+}
 
+.calculator-header {
+    width: 100%;
+    max-width: 380px;
+    margin: 0 auto;
+    background: #000075;
+    color: #ffffff;
+    padding: 22px 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.calculator-header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.calculator-header p {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
         .calculator {
             background-color: #1e1e1e;
             padding: 20px;
@@ -240,6 +266,10 @@
     </style>
 </head>
 <body>
+    <header class="calculator-header">
+        <h1> Pipilika calculator </h1>
+        <p> online smart calculator </p>
+</header>
 
     <div class="calculator">
         <div class="top-bar">
