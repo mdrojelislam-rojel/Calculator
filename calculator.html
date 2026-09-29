@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator  </title>
+    <title> Calculator</title>
+
     <style>
         * {
             box-sizing: border-box;
@@ -12,51 +13,55 @@
         }
 
         body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #121212;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 15px;
-    gap: 15px;
-}
-
-.calculator-header {
-    width: 100%;
-    max-width: 380px;
-    margin: 0 auto;
-    background: #000075;
-    color: #ffffff;
-    padding: 22px 25px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.calculator-header h1 {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-}
-
-.calculator-header p {
-    margin: 5px 0 0;
-    font-size: 0.9rem;
-    opacity: 0.9;
-}
-        .calculator {
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 24px;
-            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.6);
-            width: 100%;
-            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #121212;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 15px;
+            gap: 15px;
         }
 
-        /* উপরের টপবার এবং হিস্ট্রি টগল বাটন */
+        /*  HEADER */
+
+        .calculator-header {
+            width: 100%;
+            max-width: 420px;
+            background: #000075;
+            color: #ffffff;
+            padding: 20px 18px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .calculator-header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .calculator-header p {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /*  CALCULATOR */
+
+        .calculator {
+            width: 100%;
+            max-width: 420px;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        /* TOP BAR */
+
         .top-bar {
             display: flex;
             justify-content: flex-end;
@@ -65,23 +70,22 @@
         }
 
         .history-toggle-btn {
-            background-color: #2d2d2d;
+            background: #2d2d2d;
             color: #ff9f0a;
             border: 1px solid #ff9f0a;
-            padding: 8px 14px;
+            padding: 9px 14px;
             border-radius: 12px;
             font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.2s ease;
         }
 
-        .history-toggle-btn:hover {
-            background-color: #ff9f0a;
-            color: #1e1e1e;
+        .history-toggle-btn:active {
+            transform: scale(0.95);
         }
 
-        /* ডিসপ্লে কন্টেইনার */
+        /*  DISPLAY */
+
         .display-container {
             position: relative;
             margin-bottom: 20px;
@@ -95,23 +99,38 @@
             font-size: 0.9rem;
             font-weight: bold;
             visibility: hidden;
+            z-index: 2;
         }
 
         #display {
             width: 100%;
-            height: 80px;
-            background-color: #2d2d2d;
+            height: 110px;
+            background: #2d2d2d;
             border: none;
             outline: none;
             border-radius: 14px;
             color: #ffffff;
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 500;
             text-align: right;
-            padding: 15px;
+            padding: 18px;
+            direction: ltr;
+            overflow-x: auto;
+            white-space: nowrap;
+            caret-color: #ff9f0a;
         }
 
-        /* বোতামের গ্রিড (মোবাইলের জন্য সম্পূর্ণ রেসপন্সিভ) */
+        #display::selection {
+            background: #ff9f0a;
+            color: #111111;
+        }
+
+        #display:focus {
+            box-shadow: 0 0 0 2px rgba(255, 159, 10, 0.35);
+        }
+
+        /*  BUTTONS */
+
         .buttons {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -119,16 +138,18 @@
         }
 
         button {
-            padding: 16px 5px;
+            min-height: 58px;
+            padding: 12px 5px;
             font-size: 1.2rem;
             font-weight: bold;
             border: none;
             border-radius: 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            background-color: #333333;
+            transition: transform 0.12s ease;
+            background: #333333;
             color: #ffffff;
             user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         button:active {
@@ -136,31 +157,27 @@
         }
 
         .memory-btn {
-            background-color: #2c3e50;
+            background: #2c3e50;
             color: #00d2d3;
             font-size: 0.95rem;
         }
 
-        .operator {
-            background-color: #ff9f0a;
-            color: white;
+        .operator,
+        .equal {
+            background: #ff9f0a;
+            color: #ffffff;
         }
 
         .clear-btn {
-            background-color: #a5a5a5;
-            color: black;
+            background: #a5a5a5;
+            color: #000000;
         }
 
-        .equal {
-            background-color: #ff9f0a;
-            color: white;
-        }
+        /* HISTORY MODAL */
 
-        /* হিস্ট্রি পপআপ (Modal) স্টাইল */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.75);
@@ -169,7 +186,7 @@
             align-items: center;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.25s ease;
             z-index: 100;
             padding: 20px;
         }
@@ -180,15 +197,15 @@
         }
 
         .history-panel {
-            background-color: #1e1e1e;
+            width: 100%;
+            max-width: 380px;
+            max-height: 80vh;
+            background: #1e1e1e;
             padding: 20px;
             border-radius: 20px;
-            width: 100%;
-            max-width: 360px;
-            max-height: 80vh;
             display: flex;
             flex-direction: column;
-            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
         }
 
         .history-header {
@@ -207,11 +224,10 @@
         }
 
         .close-btn {
-            background: none;
-            border: none;
+            min-height: auto;
+            background: transparent;
             color: #a5a5a5;
             font-size: 1.5rem;
-            cursor: pointer;
             padding: 0 5px;
         }
 
@@ -223,7 +239,7 @@
         }
 
         .history-item {
-            background-color: #2d2d2d;
+            background: #2d2d2d;
             padding: 10px;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -231,9 +247,14 @@
             cursor: pointer;
         }
 
+        .history-item:active {
+            background: #3a3a3a;
+        }
+
         .history-expr {
             font-size: 0.9rem;
             color: #a5a5a5;
+            word-break: break-all;
         }
 
         .history-res {
@@ -244,270 +265,795 @@
         }
 
         .clear-history-btn {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 10px;
-            border-radius: 10px;
-            font-weight: bold;
-            cursor: pointer;
+            min-height: 45px;
+            background: #e74c3c;
+            color: #ffffff;
             margin-top: 15px;
             font-size: 0.95rem;
-            width: 100%;
         }
+
+        /* SCROLLBAR */
 
         ::-webkit-scrollbar {
             width: 5px;
+            height: 5px;
         }
+
         ::-webkit-scrollbar-thumb {
-            background: #444;
+            background: #444444;
             border-radius: 10px;
+        }
+
+        /*  MOBILE responsive */
+
+        @media (max-width: 420px) {
+
+            body {
+                padding: 10px;
+                gap: 10px;
+            }
+
+            .calculator-header {
+                padding: 17px 12px;
+            }
+
+            .calculator-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .calculator {
+                padding: 15px;
+                border-radius: 20px;
+            }
+
+            #display {
+                height: 100px;
+                font-size: 2.5rem;
+            }
+
+            button {
+                min-height: 55px;
+            }
         }
     </style>
 </head>
-<body>
-    <header class="calculator-header">
-        <h1> Pipilika calculator </h1>
-        <p> online smart calculator </p>
-</header>
 
+<body>
+
+    <!-- HEADER -->
+    <header class="calculator-header">
+        <h1>Pipilika Calculator</h1>
+        <p>Online Smart Calculator</p>
+    </header>
+
+    <!-- CALCULATOR -->
     <div class="calculator">
+
         <div class="top-bar">
-            <button class="history-toggle-btn" onclick="toggleHistory()">📜 History</button>
+            <button
+                type="button"
+                class="history-toggle-btn"
+                onclick="toggleHistory()">
+                📜 History
+            </button>
         </div>
+
+        <!-- DISPLAY -->
 
         <div class="display-container">
+
             <span id="memory-indicator">M</span>
-            <input type="text" id="display" readonly placeholder="0">
+
+            <input
+                type="text"
+                id="display"
+                placeholder="0"
+                inputmode="none"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+            >
         </div>
-        
+
+        <!-- BUTTONS -->
+
         <div class="buttons">
-            <button class="memory-btn" onclick="handleMRC()">MRC</button>
-            <button class="memory-btn" onclick="handleMPlus()">M+</button>
-            <button class="memory-btn" onclick="handleMMinus()">M-</button>
-            <button class="memory-btn" onclick="handleGT()">GT</button>
-            
-            <button class="clear-btn" onclick="clearDisplay()">C</button>
-            <button class="clear-btn" onclick="deleteLast()">DEL</button>
-            <button class="operator" onclick="calculatePercentage()">%</button>
-            <button class="operator" onclick="appendValue('/')">÷</button>
-            
-            <button onclick="appendValue('7')">7</button>
-            <button onclick="appendValue('8')">8</button>
-            <button onclick="appendValue('9')">9</button>
-            <button class="operator" onclick="appendValue('*')">×</button>
-            
-            <button onclick="appendValue('4')">4</button>
-            <button onclick="appendValue('5')">5</button>
-            <button onclick="appendValue('6')">6</button>
-            <button class="operator" onclick="appendValue('-')">−</button>
-            
-            <button onclick="appendValue('1')">1</button>
-            <button onclick="appendValue('2')">2</button>
-            <button onclick="appendValue('3')">3</button>
-            <button class="operator" onclick="appendValue('+')">+</button>
-            
-            <button onclick="appendValue('00')">00</button>
-            <button onclick="appendValue('0')">0</button>
-            <button onclick="appendValue('.')">.</button>
-            <button class="equal" onclick="calculate()">=</button>
+
+            <button
+                type="button"
+                class="memory-btn"
+                onclick="handleMRC()">
+                MRC
+            </button>
+
+            <button
+                type="button"
+                class="memory-btn"
+                onclick="handleMPlus()">
+                M+
+            </button>
+
+            <button
+                type="button"
+                class="memory-btn"
+                onclick="handleMMinus()">
+                M-
+            </button>
+
+            <button
+                type="button"
+                class="memory-btn"
+                onclick="handleGT()">
+                GT
+            </button>
+
+            <button
+                type="button"
+                class="clear-btn"
+                onclick="clearDisplay()">
+                C
+            </button>
+
+            <button
+                type="button"
+                class="clear-btn"
+                onclick="deleteLast()">
+                DEL
+            </button>
+
+            <button
+                type="button"
+                class="operator"
+                onclick="calculatePercentage()">
+                %
+            </button>
+
+            <button
+                type="button"
+                class="operator"
+                onclick="appendValue('/')">
+                ÷
+            </button>
+
+            <button type="button" onclick="appendValue('7')">7</button>
+            <button type="button" onclick="appendValue('8')">8</button>
+            <button type="button" onclick="appendValue('9')">9</button>
+
+            <button
+                type="button"
+                class="operator"
+                onclick="appendValue('*')">
+                ×
+            </button>
+
+            <button type="button" onclick="appendValue('4')">4</button>
+            <button type="button" onclick="appendValue('5')">5</button>
+            <button type="button" onclick="appendValue('6')">6</button>
+
+            <button
+                type="button"
+                class="operator"
+                onclick="appendValue('-')">
+                −
+            </button>
+
+            <button type="button" onclick="appendValue('1')">1</button>
+            <button type="button" onclick="appendValue('2')">2</button>
+            <button type="button" onclick="appendValue('3')">3</button>
+
+            <button
+                type="button"
+                class="operator"
+                onclick="appendValue('+')">
+                +
+            </button>
+
+            <button type="button" onclick="appendValue('00')">00</button>
+            <button type="button" onclick="appendValue('0')">0</button>
+            <button type="button" onclick="appendValue('.')">.</button>
+
+            <button
+                type="button"
+                class="equal"
+                onclick="calculate()">
+                =
+            </button>
+
         </div>
     </div>
 
-    <!-- হিস্ট্রি পপআপ মোডাল -->
-    <div class="modal-overlay" id="history-modal" onclick="closeModalOnOuterClick(event)">
+
+    <!-- HISTORY MODAL -->
+
+    <div
+        class="modal-overlay"
+        id="history-modal"
+        onclick="closeModalOnOuterClick(event)">
+
         <div class="history-panel">
             <div class="history-header">
-                <span class="history-title">🕒 ইতিহাস (History)</span>
-                <button class="close-btn" onclick="toggleHistory()">&times;</button>
+
+                <span class="history-title">
+                    History
+                </span>
+
+                <button
+                    type="button"
+                    class="close-btn"
+                    onclick="toggleHistory()">
+                    &times;
+                </button>
+                
             </div>
-            <div class="history-list" id="history-list">
-                <!-- হিসাবের ইতিহাস থাকবে -->
+
+            <div
+                class="history-list"
+                id="history-list">
             </div>
-            <button class="clear-history-btn" onclick="clearHistory()">হিস্ট্রি মুছুন</button>
+
+            <button
+                type="button"
+                class="clear-history-btn"
+                onclick="clearHistory()">
+                clear history 
+            </button>
         </div>
     </div>
 
     <script>
-        const display = document.getElementById('display');
-        const memoryIndicator = document.getElementById('memory-indicator');
-        const historyList = document.getElementById('history-list');
-        const historyModal = document.getElementById('history-modal');
 
-        let memoryValue = 0;   
-        let grandTotal = 0;     
-        let mrcClickCount = 0;  
+        /*  ELEMENTS */
+
+        const display =
+            document.getElementById('display');
+
+        const memoryIndicator =
+            document.getElementById('memory-indicator');
+
+        const historyList =
+            document.getElementById('history-list');
+
+        const historyModal =
+            document.getElementById('history-modal');
+
+        /*  VARIABLES */
+
+        let memoryValue = 0;
+        let grandTotal = 0;
+        let mrcClickCount = 0;
         let isEvaluated = false;
 
+        /*  HISTORY */
         function toggleHistory() {
             historyModal.classList.toggle('active');
         }
 
-        function closeModalOnOuterClick(e) {
-            if (e.target === historyModal) {
+        function closeModalOnOuterClick(event) {
+            if (event.target === historyModal) {
                 toggleHistory();
             }
         }
 
-        function appendValue(val) {
-            if (isEvaluated && !isNaN(val)) {
+        /*  DISPLAY SCROLL */
+
+        function scrollDisplayToCursor() {
+            requestAnimationFrame(() => {
+                const length = display.value.length;
+
+                const cursor = display.selectionStart ?? length;
+
+                if (cursor >= length) {
+                    display.scrollLeft =
+                        display.scrollWidth;
+
+                } else {
+                    const ratio =
+                        cursor / Math.max(length, 1);
+
+                    display.scrollLeft =
+                        Math.max(
+                            0,
+                            display.scrollWidth * ratio -
+                            display.clientWidth / 2
+                        );
+                }
+            });
+        }
+
+
+        /*  APPEND VALUE */
+
+        function appendValue(value) {
+            if (display.value === 'Error') {
                 display.value = '';
-                isEvaluated = false;
-            } else if (isEvaluated) {
                 isEvaluated = false;
             }
 
-            if (display.value === 'Error' || display.value === '0') {
-                display.value = '';
+            if (isEvaluated) {
+                if (
+                    /^[0-9.]$/.test(value) ||
+                    value === '00'
+                ) {
+                    display.value = '';
+                }
+                isEvaluated = false;
             }
-            display.value += val;
+
+
+            const start =
+                display.selectionStart ??
+                display.value.length;
+
+            const end =
+                display.selectionEnd ??
+                display.value.length;
+
+            const before =
+                display.value.slice(0, start);
+
+            const after =
+                display.value.slice(end);
+
+            display.value =
+                before + value + after;
+
+            const newPosition =
+                start + value.length;
+            display.focus();
+           display.setSelectionRange(
+                newPosition,
+                newPosition
+            );
+
+            scrollDisplayToCursor();
             mrcClickCount = 0;
         }
+
+
+        /* =========================
+           CLEAR
+        ========================== */
 
         function clearDisplay() {
             display.value = '';
-            mrcClickCount = 0;
             isEvaluated = false;
+            mrcClickCount = 0;
+            display.focus();
         }
+
+        /*  Delete */
 
         function deleteLast() {
             if (display.value === 'Error') {
-                display.value = '';
-            } else {
-                display.value = display.value.slice(0, -1);
+                clearDisplay();
+                return;
             }
+
+
+            const start =
+                display.selectionStart ??
+                display.value.length;
+            const end =
+                display.selectionEnd ??
+                display.value.length;
+
+            if (start !== end) {
+                display.value =
+                    display.value.slice(0, start) +
+                   display.value.slice(end);
+                display.focus();
+                display.setSelectionRange(
+                    start,
+                    start
+                );
+            }
+
+            else if (start > 0) {
+                display.value =
+                    display.value.slice(0, start - 1) +
+                    display.value.slice(start);
+
+                display.focus();
+                display.setSelectionRange(
+                    start - 1,
+                    start - 1
+                );
+            }
+
+            scrollDisplayToCursor();
             mrcClickCount = 0;
         }
 
-        function safeEval(expr) {
-            if (/[^0-9+\-*/.]/.test(expr)) return 'Error';
+
+        /* SAFE CALCULATION */
+
+        function safeEval(expression) {
+            if (!expression) {
+                return 'Error';
+            }
+
+            if (
+                /[^0-9+\-*/.()\s]/.test(expression)
+            ) {
+                return 'Error';
+            }
+
             try {
-                const result = Function('"use strict"; return (' + expr + ')')();
-                return isFinite(result) ? result : 'Error';
-            } catch (e) {
+
+                const result =
+                    Function(
+                        '"use strict"; return (' +
+                        expression +
+                        ')'
+                    )();
+
+                if (
+                    typeof result !== 'number' ||
+                    !Number.isFinite(result)
+                ) {
+                    return 'Error';
+                }
+
+                return result;
+            }
+            catch (error) {
                 return 'Error';
             }
         }
 
-        function calculate() {
-            if (display.value === '' || display.value === 'Error') return;
 
-            let expression = display.value;
-            let result = safeEval(expression);
+        /*  ROUND NUMBER */
+        
+        function roundResult(number) {
+            return Number(
+                Math.round(number + 'e8') + 'e-8'
+            );
+        }
+
+
+        /*   CALCULATE */
+
+        function calculate() {
+            const expression =
+                display.value.trim();
+
+
+            if (
+                expression === '' ||
+                expression === 'Error'
+            ) {
+
+                return;
+
+            }
+            const result =
+                safeEval(expression);
 
             if (result === 'Error') {
                 display.value = 'Error';
-            } else {
-                result = Number(Math.round(result + 'e8') + 'e-8');
-                addHistoryItem(expression, result);
-                display.value = result;
-                grandTotal += parseFloat(result); 
                 isEvaluated = true;
+                return;
             }
+
+            const finalResult =
+                roundResult(result);
+
+            addHistoryItem(
+                expression,
+                finalResult
+            );
+
+            display.value =
+                String(finalResult);
+            grandTotal +=
+                Number(finalResult);
+            isEvaluated = true;
+            display.focus();
+            display.setSelectionRange(
+                display.value.length,
+                display.value.length
+            );
+
+            scrollDisplayToCursor();
             mrcClickCount = 0;
         }
+
+
+        /*  PERCENTAGE */
 
         function calculatePercentage() {
-            if (display.value === '' || display.value === 'Error') return;
-
-            let expression = display.value;
-            let currentValue = safeEval(expression);
-
-            if (currentValue !== 'Error') {
-                let result = currentValue / 100;
-                result = Number(Math.round(result + 'e8') + 'e-8');
-                addHistoryItem(`${expression}%`, result);
-                display.value = result;
-                isEvaluated = true;
-            } else {
-                display.value = 'Error';
+            if (
+                display.value === '' ||
+                display.value === 'Error'
+            ) {
+                return;
             }
+
+            const expression =
+                display.value;
+
+            const currentValue =
+                safeEval(expression);
+
+
+            if (currentValue === 'Error') {
+                display.value = 'Error';
+
+                return;
+            }
+            const result =
+                roundResult(
+                    currentValue / 100
+                );
+            addHistoryItem(
+                expression + '%',
+                result
+            );
+            display.value =
+                String(result);
+            isEvaluated = true;
+            display.focus();
+            display.setSelectionRange(
+                display.value.length,
+                display.value.length
+            );
+            scrollDisplayToCursor();
             mrcClickCount = 0;
         }
 
-        function addHistoryItem(expr, res) {
-            const item = document.createElement('div');
-            item.className = 'history-item';
-            
-            let cleanExpr = expr.replaceAll('*', '×').replaceAll('/', '÷');
-            
-            item.innerHTML = `
-                <div class="history-expr">${cleanExpr}</div>
-                <div class="history-res">= ${res}</div>
-            `;
 
-            item.onclick = function() {
-                display.value = res;
-                isEvaluated = true;
-                toggleHistory();
-            };
+        /*  HISTORY ITEM */
 
+        function addHistoryItem(
+            expression,
+            result
+        ) {
+
+            const item =
+                document.createElement('div');
+
+
+            item.className =
+                'history-item';
+
+
+            const exprElement =
+                document.createElement('div');
+
+            exprElement.className =
+                'history-expr';
+
+            exprElement.textContent =
+                expression
+                    .replaceAll('*', '×')
+                    .replaceAll('/', '÷');
+
+            const resultElement =
+                document.createElement('div');
+
+            resultElement.className =
+                'history-res';
+
+            resultElement.textContent =
+                '= ' + result;
+
+            item.appendChild(
+                exprElement
+            );
+
+            item.appendChild(
+                resultElement
+            );
+
+            item.addEventListener(
+                'click',
+                function() {
+
+                    display.value =
+                        String(result);
+
+                    isEvaluated = true;
+
+                    toggleHistory();
+
+                    display.focus();
+
+                    display.setSelectionRange(
+                        display.value.length,
+                        display.value.length
+                    );
+                }
+            );
             historyList.prepend(item);
         }
+
+        /*  CLEAR HISTORY */
 
         function clearHistory() {
             historyList.innerHTML = '';
         }
 
+
+        /*  MEMORY M+ */
+
         function handleMPlus() {
-            let currentValue = safeEval(display.value);
-            if (currentValue !== 'Error' && !isNaN(currentValue)) {
-                memoryValue += parseFloat(currentValue);
+            const value =
+                safeEval(display.value);
+
+            if (
+                value !== 'Error' &&
+                Number.isFinite(value)
+            ) {
+                memoryValue +=
+                    Number(value);
                 updateMemoryIndicator();
-            } else {
+            }
+
+            else {
                 display.value = 'Error';
             }
             mrcClickCount = 0;
         }
 
+        /*  MEMORY M- */
+
         function handleMMinus() {
-            let currentValue = safeEval(display.value);
-            if (currentValue !== 'Error' && !isNaN(currentValue)) {
-                memoryValue -= parseFloat(currentValue);
+            const value =
+                safeEval(display.value);
+
+            if (
+                value !== 'Error' &&
+                Number.isFinite(value)
+            ) {
+                memoryValue -=
+                    Number(value);
                 updateMemoryIndicator();
-            } else {
+            }
+
+            else {
                 display.value = 'Error';
             }
             mrcClickCount = 0;
         }
+
+        /*  MEMORY MRC */
 
         function handleMRC() {
             mrcClickCount++;
             if (mrcClickCount === 1) {
-                display.value = memoryValue;
+                display.value =
+                    String(memoryValue);
                 isEvaluated = true;
-            } else if (mrcClickCount >= 2) {
+                display.focus();
+                display.setSelectionRange(
+                    display.value.length,
+                    display.value.length
+                );
+            }
+
+
+            else {
                 memoryValue = 0;
                 display.value = '';
+                isEvaluated = false;
                 updateMemoryIndicator();
                 mrcClickCount = 0;
+                display.focus();
             }
         }
 
+
+        /*  GRAND TOTAL */
+
         function handleGT() {
-            display.value = grandTotal;
+            display.value =
+                String(roundResult(grandTotal));
             isEvaluated = true;
+            display.focus();
+            display.setSelectionRange(
+                display.value.length,
+                display.value.length
+            );
+            scrollDisplayToCursor();
             mrcClickCount = 0;
         }
 
+
+        /*  MEMORY INDICATOR  */
+
         function updateMemoryIndicator() {
             if (memoryValue !== 0) {
-                memoryIndicator.style.visibility = 'visible';
-            } else {
-                memoryIndicator.style.visibility = 'hidden';
+                memoryIndicator.style.visibility =
+                    'visible';
+            }
+
+            else {
+                memoryIndicator.style.visibility =
+                    'hidden';
             }
         }
+        /* KEYBOARD */
+        document.addEventListener(
+            'keydown',
+            function(event) {
+                const key =
+                    event.key;
 
-        document.addEventListener('keydown', function(event) {
-            const key = event.key;
-            if (!isNaN(key)) appendValue(key);
-            if (['+', '-', '*', '/'].includes(key)) appendValue(key);
-            if (key === '.') appendValue('.');
-            if (key === 'Enter' || key === '=') calculate();
-            if (key === 'Backspace') deleteLast();
-            if (key === 'Escape') clearDisplay();
-            if (key === '%') calculatePercentage();
-        });
+                /* Number */
+                if (/^[0-9]$/.test(key)) {
+                    event.preventDefault();
+                    appendValue(key);
+                    return;
+                }
+
+
+                /* Operators */
+                if (
+                    ['+', '-', '*', '/'].includes(key)
+                ) {
+                    event.preventDefault();
+                    appendValue(key);
+                    return;
+                }
+
+                /* Decimal */
+                if (key === '.') {
+                    event.preventDefault();
+                    appendValue('.');
+                    return;
+                }
+
+
+                /* Calculate */
+                if (
+                    key === 'Enter' ||
+                    key === '='
+                ) {
+                    event.preventDefault();
+                    calculate();
+                    return;
+                }
+
+                /* Backspace */
+                if (key === 'Backspace') {
+                    event.preventDefault();
+                    deleteLast();
+                    return;
+                }
+
+                /* Delete */
+                if (key === 'Delete') {
+                    event.preventDefault();
+                    deleteLast();
+                    return;
+                }
+
+                /* Escape */
+                if (key === 'Escape') {
+                    event.preventDefault();
+                    clearDisplay();
+                    return;
+                }
+
+                /* Percentage */
+                if (key === '%') {
+                    event.preventDefault();
+                    calculatePercentage();
+
+                }
+            }
+        );
+
+
+        /* INITIAL FOCUS */
+        display.addEventListener(
+            'focus',
+            function() {
+                scrollDisplayToCursor();
+            }
+        );
     </script>
+
 </body>
 </html>
